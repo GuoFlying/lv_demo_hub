@@ -1,0 +1,14 @@
+prefix=/home/flying20x/workspace/lib/freetype/build
+exec_prefix=/home/flying20x/workspace/lib/freetype/build
+libdir=/home/flying20x/workspace/lib/freetype/build/lib
+includedir=/home/flying20x/workspace/lib/freetype/build/include
+
+Name: FreeType 2
+URL: https://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 24.0.18
+Requires:
+Requires.private: 
+Libs: -L${libdir} -lfreetype
+Libs.private: 
+Cflags: -I${includedir}/freetype2
