@@ -2,18 +2,18 @@
  * @Author: Flying
  * @Date: 2022-05-09 22:49:27
  * @LastEditors: Flying
- * @LastEditTime: 2022-06-06 22:12:19
+ * @LastEditTime: 2022-07-18 22:45:43
  * @Description: 新建文件
  */
-#include "wm_monitor.h"
+#include "wm_settings.h"
 #include "../../common/c_common.h"
-wm_monitor::wm_monitor(lv_obj_t *parent)
+wm_settings::wm_settings(lv_obj_t *parent)
 {
     this->parent = parent;
     this->cont = NULL;
 }
 
-wm_monitor::~wm_monitor()
+wm_settings::~wm_settings()
 {
 }
 
@@ -22,7 +22,7 @@ wm_monitor::~wm_monitor()
  * @param {*}
  * @return {*}
  */
-void wm_monitor::show()
+void wm_settings::show()
 {
     if (this->cont)
     {
@@ -52,7 +52,7 @@ void wm_monitor::show()
  * @param {*}
  * @return {*}
  */
-void wm_monitor::body_create()
+void wm_settings::body_create()
 {
     lv_obj_set_flex_flow(this->cont, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(this->cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
@@ -90,7 +90,7 @@ void wm_monitor::body_create()
  * @param {*}
  * @return {*}
  */
-bool wm_monitor::exit()
+bool wm_settings::exit()
 {
     if (this->cont)
     {
@@ -107,11 +107,11 @@ bool wm_monitor::exit()
  * @param {int32_t} v
  * @return {*}
  */
-void wm_monitor::open_changer_anim_cb(void *var, int32_t v)
+void wm_settings::open_changer_anim_cb(void *var, int32_t v)
 {
     lv_obj_t *obj = (lv_obj_t *)var;
     lv_coord_t w, h;
-    wm_monitor *_this = (wm_monitor *)obj->user_data;
+    wm_settings *_this = (wm_settings *)obj->user_data;
 
     w = lv_map(v, 0, 256, 10, MY_UI_W_MAX * 0.95);
     h = lv_map(v, 0, 256, 10, MY_UI_H_MAX * 0.95);

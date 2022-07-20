@@ -412,12 +412,12 @@ xcopy $(SolutionDir)libs\rlottie\x64\rlottie.dll $(SolutionDir)Output\Binaries\D
     <ClCompile Include="application\hw_app\voice\hw_app_voice.cpp" />
     <ClCompile Include="application\hw_app\wifi\hw_app_wifi.cpp" />
     <ClCompile Include="application\hw_app\wifi\v_wifi_list.cpp" />
-    <ClCompile Include="application\sys\wm_monitor.cpp" />
     <ClCompile Include="application\sys\wm_body.cpp" />
     <ClCompile Include="application\sys\wm_explain.cpp" />
     <ClCompile Include="application\sys\wm_footer.cpp" />
     <ClCompile Include="application\sys\wm_head.cpp" />
     <ClCompile Include="application\sys\wm_home_btn.cpp" />
+    <ClCompile Include="application\sys\wm_settings.cpp" />
     <ClCompile Include="application\wm_application.cpp" />
     <ClCompile Include="common\font\c_font.cpp" />
     <ClCompile Include="lvgl\demos\benchmark\assets\img_benchmark_cogwheel_alpha16.c" />
@@ -897,12 +897,12 @@ xcopy $(SolutionDir)libs\rlottie\x64\rlottie.dll $(SolutionDir)Output\Binaries\D
     <ClInclude Include="application\hw_app\common\hw_app_base.h" />
     <ClInclude Include="application\hw_app\hw_app.h" />
     <ClInclude Include="application\hw_app\wifi\v_wifi_list.h" />
-    <ClInclude Include="application\sys\wm_monitor.h" />
     <ClInclude Include="application\sys\wm_body.h" />
     <ClInclude Include="application\sys\wm_explain.h" />
     <ClInclude Include="application\sys\wm_footer.h" />
     <ClInclude Include="application\sys\wm_head.h" />
     <ClInclude Include="application\sys\wm_home_btn.h" />
+    <ClInclude Include="application\sys\wm_settings.h" />
     <ClInclude Include="application\wm_application.h" />
     <ClInclude Include="base_main_windows.h" />
     <ClInclude Include="common\c_common.h" />

@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-03-23 21:12:02
  * @LastEditors: Flying
- * @LastEditTime: 2022-07-14 21:40:13
+ * @LastEditTime: 2022-07-19 22:37:49
  * @Description: 新建文件
  */
 #include "wm_application.h"
@@ -64,8 +64,7 @@ wm_application::wm_application()
     lv_obj_center(this->app_home);
 
     this->home_btn = new wm_home_btn(wm_application::home_btn_event_cb, this);
-    this->body = new wm_body(this->app_home, wm_application::page_scroll_event_cb,
-                             wm_application::app_clicked_event_cb, this);
+    this->body = new wm_body(this->app_home, wm_application::body_event_cb, this);
 
     for (auto item : apps)
     {
@@ -78,7 +77,7 @@ wm_application::wm_application()
 
     this->head = new wm_head(this->app_home);
 
-    this->about = new wm_monitor(lv_layer_top());
+    this->settings = new wm_settings(lv_layer_top());
     this->explain = new wm_explain(lv_layer_top());
 
     lv_disp_load_scr(this->app_home);
@@ -102,15 +101,33 @@ void wm_application::run()
  * @param {int} index
  * @return {*}
  */
-void wm_application::page_scroll_event_cb(int index, void *cb_arg)
+void wm_application::body_event_cb(wm_body *body)
 {
-    // LV_LOG_USER("%d", index);
-    wm_application *_this = (wm_application *)cb_arg;
+    wm_application *_this = (wm_application *)body->get_cb_arg();
     if (!_this)
     {
         return;
     }
-    _this->footer->select(index);
+    wm_body::CODE_E code = body->get_sync_code();
+    switch (code)
+    {
+    case wm_body::CODE_SCROLL:
+        _this->footer->select(body->get_sync_page());
+        break;
+    case wm_body::CODE_CLICKED:
+        if (body->get_sync_index() < APPS_SIZE)
+        {
+            lv_obj_t *app = apps[body->get_sync_index()].func();
+            LV_ASSERT(app);
+            _this->show_app(app);
+        }
+        break;
+    case wm_body::CODE_GESTURE_UP:
+        LV_LOG_USER("");
+        break;
+    default:
+        break;
+    }
 }
 
 /**
@@ -172,7 +189,7 @@ void wm_application::home_btn_event_cb(int code, void *cb_arg)
     case HOME_BTN_CODE_HOME:
         _this->head->reset();
         is = _this->del_app();
-        if (_this->about->exit())
+        if (_this->settings->exit())
         {
             is = true;
         }
@@ -185,21 +202,21 @@ void wm_application::home_btn_event_cb(int code, void *cb_arg)
             _this->body->select_page(0);
         }
         break;
-    case HOME_BTN_CODE_ABOUT:
+    case HOME_BTN_CODE_SETTINGS:
         _this->explain->exit();
-        is = _this->about->exit();
+        is = _this->settings->exit();
         if (is)
         {
             break;
         }
-        _this->about->show();
+        _this->settings->show();
         break;
     case HOME_BTN_CODE_THEME:
         _this->change_theme();
         break;
     case HOME_BTN_CODE_EXPLAIN:
 
-        _this->about->exit();
+        _this->settings->exit();
         is = _this->explain->exit();
         if (is)
         {
@@ -212,27 +229,6 @@ void wm_application::home_btn_event_cb(int code, void *cb_arg)
     }
 }
 
-/**
- * @description:
- * @param {int} index
- * @return {*}
- */
-void wm_application::app_clicked_event_cb(int index, void *cb_arg)
-{
-    LV_LOG_USER("%d", index);
-    wm_application *_this = (wm_application *)cb_arg;
-    if (!_this)
-    {
-        return;
-    }
-
-    if (index < APPS_SIZE)
-    {
-        lv_obj_t *app = apps[index].func();
-        LV_ASSERT(app);
-        _this->show_app(app);
-    }
-}
 /**
  * @description:
  * @param {int} index

@@ -774,9 +774,6 @@
     <ClCompile Include="common\font\c_font.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="application\sys\wm_monitor.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="application\sys\wm_explain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -2175,6 +2172,9 @@
     <ClCompile Include="application\app\keyboard\app_ime_pinyin_2.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="application\sys\wm_settings.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lv_conf.h">
@@ -2268,9 +2268,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="common\font\c_font.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="application\sys\wm_monitor.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="application\sys\wm_explain.h">
@@ -2988,6 +2985,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="lvgl\lvgl.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="application\sys\wm_settings.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

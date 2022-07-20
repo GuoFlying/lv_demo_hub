@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-03-25 22:16:25
  * @LastEditors: Flying
- * @LastEditTime: 2022-05-10 23:40:41
+ * @LastEditTime: 2022-07-17 09:39:36
  * @Description: 新建文件
  */
 #pragma once
@@ -12,7 +12,7 @@
 typedef enum HOME_BTN_CODE_E_
 {
     HOME_BTN_CODE_HOME,
-    HOME_BTN_CODE_ABOUT,
+    HOME_BTN_CODE_SETTINGS,
     HOME_BTN_CODE_THEME,
     HOME_BTN_CODE_EXPLAIN,
 } HOME_BTN_CODE_E;

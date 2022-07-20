@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-05-21 12:13:05
  * @LastEditors: Flying
- * @LastEditTime: 2022-05-21 16:47:03
+ * @LastEditTime: 2022-07-20 20:43:27
  * @Description: 修改文件
  */
 #include "folder_browser.h"
@@ -136,7 +136,7 @@ void folder_browser::dir_event_handler(lv_event_t *e)
     }
     else
     {
-        strncat(new_path, text, FILE_PATH_MAX);
+        strncat(new_path, (const char *)text, FILE_PATH_MAX - 1);
         LV_LOG_USER("%s", new_path);
         int res = file_rover_get_row_down(new_path, &_this->rows);
         if (res == 0)
@@ -171,7 +171,7 @@ void folder_browser::file_event_handler(lv_event_t *e)
     {
         return;
     }
-    
+
     tail_name += 1;
     for (auto item : _this->exec_map)
     {

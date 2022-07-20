@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-02-25 22:54:32
  * @LastEditors: Flying
- * @LastEditTime: 2022-07-10 15:39:24
+ * @LastEditTime: 2022-07-20 20:20:54
  * @Description: file content
  */
 #include "lvgl/lvgl.h"
@@ -94,13 +94,17 @@ static int timerfd_init()
 
 int main(int argc, char *argv[])
 {
-    /*LittlevGL init*/
+    int mode = 4; //默认双buffer
+    if (argc >= 2)
+    {
+        mode = atoi(argv[1]);
+    }
     lv_init();
 
     epollfd_init();
     timerfd_init();
 
-    /*Linux frame buffer device init*/
+    /*初始化fb后，会动态设置分辨率*/
     fbdev_init();
 
     my_app_init(argc, argv);
@@ -120,7 +124,37 @@ int main(int argc, char *argv[])
     disp_drv.flush_cb = fbdev_flush;
     disp_drv.hor_res = MY_UI_W_MAX;
     disp_drv.ver_res = MY_UI_H_MAX;
-    disp_drv.full_refresh = MY_DOUBLE_FB ? 1 : 0;
+
+    switch (mode)
+    {
+    case 0: // 0度
+    case 2: // 180度
+        disp_drv.sw_rotate = 1;
+        disp_drv.rotated = mode;
+        break;
+    case 1: // 90度
+    case 3: // 270度
+    {
+        //宽高对调
+        int tmp = MY_UI_W_MAX;
+        MY_UI_W_MAX = MY_UI_H_MAX;
+        MY_UI_H_MAX = tmp;
+        MY_UI_W_ZOOM = MY_UI_W_MAX * 1.0 / MY_BASE_W_MAX;
+        MY_UI_H_ZOOM = MY_UI_H_MAX * 1.0 / MY_BASE_H_MAX;
+        
+        disp_drv.sw_rotate = 1;
+        disp_drv.rotated = mode;
+    }
+
+    break;
+    case 4: //双bufferfb
+        disp_drv.full_refresh = 1;
+        break;
+    default:
+        printf("error! none cmd! see README.md\r\n");
+        exit(1);
+        break;
+    }
 
     lv_disp_drv_register(&disp_drv);
 

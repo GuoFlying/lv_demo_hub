@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-03-26 12:51:17
  * @LastEditors: Flying
- * @LastEditTime: 2022-06-01 23:21:43
+ * @LastEditTime: 2022-07-20 18:06:10
  * @Description: 新建文件
  */
 #include "wm_body.h"
@@ -23,12 +23,13 @@
  * @param {lv_obj_t} *parent
  * @return {*}
  */
-wm_body::wm_body(lv_obj_t *parent, scroll_event_cb_t scroll_cb, item_clicked_event_cb_t clicked_cb, void *cb_arg)
+wm_body::wm_body(lv_obj_t *parent, wm_body_event_cb_t event_cb, void *cb_arg)
 {
+    this->sync_page = 0;
+    this->sync_index = 0;
     this->item_list.clear();
     this->page_list.clear();
-    this->scroll_cb = scroll_cb;
-    this->clicked_cb = clicked_cb;
+    this->event_cb = event_cb;
     this->cb_arg = cb_arg;
     this->cont = lv_obj_create(parent);
     this->row_max = 2 * MY_UI_H_ZOOM + 0.5; //行数
@@ -124,11 +125,12 @@ void wm_body::scroll_event_cb(lv_event_t *e)
 
     lv_point_t p;
     lv_obj_get_scroll_end(cont, &p);
-    int index = p.x / (CONT_W_MAX);
+    _this->sync_page = p.x / (CONT_W_MAX);
+    _this->sync_code = CODE_SCROLL;
     // LV_LOG_USER("page = %d\n", index);
-    if (_this->scroll_cb)
+    if (_this->event_cb)
     {
-        _this->scroll_cb(index, _this->cb_arg);
+        _this->event_cb(_this);
     }
 }
 
@@ -159,7 +161,7 @@ lv_obj_t *wm_body::get_page(uint8_t index)
  * @param {*}
  * @return {*}
  */
-lv_obj_t *wm_body::add_item(int current_frame, char *lottie_name, char *label_text)
+lv_obj_t *wm_body::add_item(int current_frame, char *lottie_name, char *label_text, bool is_draw_line)
 {
     int count = this->item_list.size();
     int page_index = count / (this->row_max * this->col_max);
@@ -186,7 +188,18 @@ lv_obj_t *wm_body::add_item(int current_frame, char *lottie_name, char *label_te
         lv_rlottie_set_current_frame(obj, current_frame);
     }
     lv_obj_set_pos(obj, icon_x, icon_y);
+
     obj->user_data = (void *)count;
+
+    if (is_draw_line)
+    {
+        lv_obj_t *line = lv_line_create(item_parent);
+        static lv_point_t p[] = {{0, 0}, {(short int)(ITEM_W / 3), 0}};
+        lv_line_set_points(line, p, 2);
+        lv_obj_set_style_line_width(line, 2 * MY_UI_H_ZOOM, 0);
+        lv_obj_set_style_line_color(line, lv_palette_main(LV_PALETTE_RED), 0);
+        lv_obj_align_to(line, obj, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+    }
 
     int label_x = icon_x - ITEM_SPACE_W / this->row_max;
     int label_y = icon_y + ITEM_H;
@@ -206,6 +219,10 @@ lv_obj_t *wm_body::add_item(int current_frame, char *lottie_name, char *label_te
     lv_obj_add_event_cb(obj, wm_body::item_event_cb, LV_EVENT_PRESSED, this);
     lv_obj_add_event_cb(obj, wm_body::item_event_cb, LV_EVENT_RELEASED, this);
     lv_obj_add_event_cb(obj, wm_body::item_event_cb, LV_EVENT_CLICKED, this);
+
+    lv_obj_clear_flag(obj, LV_OBJ_FLAG_GESTURE_BUBBLE);
+    lv_obj_add_event_cb(obj, wm_body::item_event_cb, LV_EVENT_GESTURE, this);
+
     lv_obj_add_flag(obj, LV_OBJ_FLAG_CLICKABLE);
     return obj;
 }
@@ -220,12 +237,42 @@ void wm_body::item_event_cb(lv_event_t *e)
     lv_event_code_t code = lv_event_get_code(e);
     wm_body *_this = (wm_body *)lv_event_get_user_data(e);
     lv_obj_t *obj = lv_event_get_target(e);
+    if (code == LV_EVENT_GESTURE)
+    {
+        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
+
+        bool success = false;
+        switch (dir)
+        {
+        case LV_DIR_LEFT:
+            // printf("LV_DIR_LEFT\r\n");
+            break;
+        case LV_DIR_RIGHT:
+            // printf("LV_DIR_RIGHT\r\n");
+            break;
+        case LV_DIR_TOP:
+            _this->sync_index = *((int *)&obj->user_data);
+            _this->sync_code = CODE_GESTURE_UP;
+            if (_this->event_cb)
+            {
+                _this->event_cb(_this);
+            }
+            lv_obj_add_flag(obj, LV_OBJ_FLAG_USER_2);
+            break;
+        case LV_DIR_BOTTOM:
+            // printf("LV_DIR_BOTTOM\r\n");
+            break;
+        default:
+            break;
+        }
+        return;
+    }
 
     if (code == LV_EVENT_PRESSED)
     {
         lv_rlottie_set_play_mode(obj, LV_RLOTTIE_CTRL_LOOP);
         lv_obj_set_style_bg_opa(obj, LV_OPA_40, 0);
-
+        lv_obj_clear_flag(obj, LV_OBJ_FLAG_USER_2);
         return;
     }
     if (code == LV_EVENT_RELEASED)
@@ -239,10 +286,17 @@ void wm_body::item_event_cb(lv_event_t *e)
     {
         return;
     }
-    int index = *((int *)&obj->user_data);
-    if (_this->clicked_cb)
+
+    if (lv_obj_has_flag(obj, LV_OBJ_FLAG_USER_2))
     {
-        _this->clicked_cb(index, _this->cb_arg);
+        return;
+    }
+
+    _this->sync_index = *((int *)&obj->user_data);
+    _this->sync_code = CODE_CLICKED;
+    if (_this->event_cb)
+    {
+        _this->event_cb(_this);
     }
     // LV_LOG_USER("CLICKED %d", index);
 }

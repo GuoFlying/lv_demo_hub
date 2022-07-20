@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-03-25 22:16:00
  * @LastEditors: Flying
- * @LastEditTime: 2022-06-06 22:36:40
+ * @LastEditTime: 2022-07-17 09:38:31
  * @Description: 新建文件
  */
 #include "wm_home_btn.h"
@@ -17,6 +17,7 @@
 #define UNICODE_THEME "\xEE\x9B\x86"   // 0XE6C6
 #define UNICODE_EXPLAIN "\xEE\xA3\x88" // 0XE8C8
 #define UNICODE_PUS "\xEE\x98\xA8"     // 0XE628
+#define UNICODE_SETTING_U16 0XE78E
 
 #define UNICONDE_SIZE (18 * MY_UI_W_ZOOM)
 /**
@@ -62,7 +63,7 @@ wm_home_btn::wm_home_btn(home_btn_event_cb_t cb, void *cb_arg)
     lv_obj_align(this->btn_items[0], LV_ALIGN_TOP_MID, 0, 0 * MY_UI_H_ZOOM);
 
     lv_obj_set_style_text_font(this->btn_items[1], c_font::get_icon_font(UNICONDE_SIZE), 0);
-    lv_label_set_text(this->btn_items[1], UNICODE_ABOUT);
+    lv_label_set_text(this->btn_items[1], c_font::get_utf8(UNICODE_SETTING_U16).data());
     // lv_obj_set_style_bg_img_src(this->btn_items[1], UNICODE_ABOUT, 0);
     lv_obj_align(this->btn_items[1], LV_ALIGN_BOTTOM_MID, 0, 0 * MY_UI_H_ZOOM);
 

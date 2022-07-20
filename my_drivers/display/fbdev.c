@@ -179,7 +179,6 @@ void fbdev_exit(void)
  */
 void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_p)
 {
-    static char is = 0;
     if(fbp == NULL ||
             area->x2 < 0 ||
             area->y2 < 0 ||
@@ -196,13 +195,7 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
     int32_t act_y2 = area->y2 > (int32_t)vinfo.yres - 1 ? (int32_t)vinfo.yres - 1 : area->y2;
 
     if(drv->full_refresh == 1){
-        if(is == 0){
-            is  = 1;
-            vinfo.yoffset = 0;
-        }else{
-            is = 0;
-            vinfo.yoffset = vinfo.yres;
-        }
+        vinfo.yoffset = vinfo.yoffset != 0 ? vinfo.yoffset = 0: vinfo.yres;
     }
   
     lv_coord_t w = (act_x2 - act_x1 + 1);

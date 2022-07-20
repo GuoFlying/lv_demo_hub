@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-03-23 21:12:14
  * @LastEditors: Flying
- * @LastEditTime: 2022-05-15 20:50:23
+ * @LastEditTime: 2022-07-19 22:01:44
  * @Description: 新建文件
  */
 #pragma once
@@ -13,7 +13,7 @@
 #include "sys/wm_body.h"
 #include "sys/wm_footer.h"
 #include "app/app.h"
-#include "sys/wm_monitor.h"
+#include "sys/wm_settings.h"
 #include "sys/wm_explain.h"
 #include "hw_app/hw_app.h"
 
@@ -28,11 +28,10 @@ private:
     wm_home_btn *home_btn;
     wm_body *body;
     wm_footer *footer;
-    wm_monitor *about;
+    wm_settings *settings;
     wm_explain *explain;
 
-    static void page_scroll_event_cb(int index, void *cb_arg);
-    static void app_clicked_event_cb(int index, void *cb_arg);
+    static void body_event_cb(wm_body *body);
     static void footer_event_cb(int index, void *cb_arg);
     static void home_btn_event_cb(int code, void *cb_arg);
 

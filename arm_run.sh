@@ -2,7 +2,7 @@
  # @Author: Flying
  # @Date: 2022-03-27 11:48:31
  # @LastEditors: Flying
- # @LastEditTime: 2022-03-27 11:48:32
+ # @LastEditTime: 2022-07-20 20:10:01
  # @Description: 新建文件
 ### 
 nolog_op=""
@@ -28,7 +28,7 @@ echo  3 > /proc/sys/vm/drop_caches
 
 if [[ "$nolog_op" == "nolog" ]]
 then
-    ./lv_demo_hub >>/dev/null 2>&1
+    ./lv_demo_hub $2 >>/dev/null 2>&1
 else
-    ./lv_demo_hub
+    ./lv_demo_hub $1
 fi

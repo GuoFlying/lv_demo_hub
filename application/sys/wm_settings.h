@@ -2,13 +2,13 @@
  * @Author: Flying
  * @Date: 2022-05-09 22:49:35
  * @LastEditors: Flying
- * @LastEditTime: 2022-05-09 23:14:57
+ * @LastEditTime: 2022-07-18 22:45:40
  * @Description: 新建文件
  */
 #pragma once
 #include "../../my_conf.h"
 #include "../../lvgl/lvgl.h"
-class wm_monitor
+class wm_settings
 {
 private:
     lv_obj_t *cont;
@@ -17,8 +17,8 @@ private:
     void body_create();
 
 public:
-    wm_monitor(lv_obj_t *parent);
-    ~wm_monitor();
+    wm_settings(lv_obj_t *parent);
+    ~wm_settings();
     void show();
     bool exit();
 };

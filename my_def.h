@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-02-25 22:43:33
  * @LastEditors: Flying
- * @LastEditTime: 2022-07-10 15:39:31
+ * @LastEditTime: 2022-07-20 20:35:08
  * @Description: 通用定义
  */
 #pragma once
@@ -20,7 +20,7 @@
     #define MY_REALITE_H_MAX 600
 #endif
 
-#define MY_VERSION "1.2.0"
+#define MY_VERSION "1.3.0"
 
 #ifdef F_WINDOWS
 #define MY_RESOURCE_PATH "./resource/"
@@ -42,5 +42,3 @@
 #define MY_FONT_NAME       MY_RESOURCE_PATH "font/SourceHanSansCN-Regular.ttf"
 #define MY_ICON_FONT_NAME  MY_RESOURCE_PATH "font/flying_iconfont.ttf"
 
-//linuxarm other 
-#define MY_DOUBLE_FB        1 /*LINUXARM 是否开启双buffer （处理屏幕撕裂）*/

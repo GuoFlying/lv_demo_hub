@@ -2,7 +2,7 @@
  * @Author: Flying
  * @Date: 2022-02-25 20:58:21
  * @LastEditors: Flying
- * @LastEditTime: 2022-07-13 22:15:10
+ * @LastEditTime: 2022-07-20 20:34:18
  * @Description: README
 -->
 ## 一、概述
@@ -10,6 +10,7 @@
 - LVGL DEMO 仓库
 - 目的：可快速评估LVGL组件，了解LVGL能做些什么
 - 支持：ubuntu(gcc)、windows(X64 vs2022)、linux arm（sigmastar SSD2XX）
+- [视频演示 https://www.bilibili.com/video/BV1G94y1Q7i3?share_source=copy_web&vd_source=96eea623fa6e1f143b5307f823819f90](https://www.bilibili.com/video/BV1G94y1Q7i3?share_source=copy_web&vd_source=96eea623fa6e1f143b5307f823819f90)
 
 - 1024*600 效果
 
@@ -46,8 +47,6 @@
 
 ``` shell
   git clone  https://gitee.com/mFlying/lv_demo_hub.git
-  git submodule init
-  git submodule update
 ```
 
 ### VS2019编译说明
@@ -94,6 +93,13 @@
   - 该DMEO 无点屏操作，运行该demo之前必须先初始化panel，点屏参考见 [Flying/ssd2xx-demo](https://gitee.com/mFlying/ssd2xx-demo/blob/master/2.panel/README.md)
   - 该DEMO 自适应分辨率，但不适应位深，需要根据平台，修改`lv_conf.h`中的`LV_COLOR_DEPTH`后重新编译(DEMO 默认为ARGB8888)
   
+- 运行：
+
+- `./run.sh ` 双buffer fb
+- `./run.sh 0` 单buffer fb
+- `./run.sh 1` 旋转90度
+- `./run.sh 2` 旋转180度
+- `./run.sh 3` 旋转270度
 
 ## 四、文件说明
 
